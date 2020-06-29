@@ -6,10 +6,18 @@ class App extends React.Component {
     super(props);
     this.state = { todoList: [], filterCriteria: "all" };
   }
+
   componentDidMount() {
     this.setState({todoList: this.getTodoList()});
   }
+
+  componentDidUpdate(){
+    this.saveLocalTodoList();
+  }
+
   getTodoList = () => {
+    console.log('todoListAfterRemove getTodoList');
+    
     return JSON.parse(localStorage.getItem("todo-list")) || [];
   };
 
@@ -23,13 +31,10 @@ class App extends React.Component {
     this.setState({
       todoList: [...this.state.todoList, { task: value, isCompleted: false }],
     });
-
-    this.saveLocalTodoList();
   };
 
-  saveLocalTodoList = () => {
+  saveLocalTodoList = async () => {
     console.log('removed-todoListAfterRemove',this.state.todoList);
-    
     localStorage.setItem("todo-list", JSON.stringify(this.state.todoList));
   };
 
@@ -49,9 +54,9 @@ class App extends React.Component {
        return index !== i
       })
     console.log('todoListAfterRemove', todoListAfterRemove);
-    this.setState({todoList: []})
+    this.setState({todoList: todoListAfterRemove})
     console.log('current-todoListAfterRemove',this.state.todoList);
-    this.saveLocalTodoList();
+   
   };
 
   render() {
